@@ -1,9 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ImportAttendance from "./ImportAttendance";
 
 function Attendance() {
   const [data, setData] = useState([]);
+
+  const handleChange = useCallback((newData) => {
+    setData(newData);
+ }, []);
 
   const URL = 'http://backend-test.test/api';
 
@@ -32,9 +37,11 @@ function Attendance() {
   }, []);
 
   return (
-    <div className="row d-flex justify-content-center mt-5">
+    <div className="row d-flex justify-content-center mt-3">
         <div className="col-md-6">
-            <h3 className='mb-4'>Attendance Report</h3>
+            <ImportAttendance  handleChange={handleChange} />
+
+            <h3 className='mb-4 mt-5'>Attendance Report</h3>
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -47,8 +54,8 @@ function Attendance() {
                 </thead>
                 <tbody>
                     {
-                        data.map(element => {
-                        return <tr>
+                        data.map((element, index) => {
+                        return <tr key={index}>
                             <td>{element.id}</td>
                             <td>{element.employee.name}</td>
                             <td>{element.checkin ? element.checkin : 'N/A'}</td>
